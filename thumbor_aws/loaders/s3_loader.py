@@ -46,7 +46,8 @@ def load(context, url, callback):
     else:
         bucket, url = _get_bucket(url)
         if not _validate_bucket(context, bucket):
-            return callback(None)
+            callback(None)
+            return
 
     bucket_loader = Bucket(
         connection=thumbor_aws.connection.get_connection(context),
@@ -55,6 +56,7 @@ def load(context, url, callback):
 
     file_key = bucket_loader.get_key(url)
     if not file_key:
-        return callback(None)
+        callback(None)
+        return
 
-    return callback(file_key.read())
+    callback(file_key.read())
